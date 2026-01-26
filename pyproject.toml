@@ -8,7 +8,7 @@ readme = "README.md"
 authors = [
     {name = 'Jens Diemer', email = 'git@jensdiemer.de'}
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "MC6809",  # https://github.com/6809/MC6809
     "dragonlib>=0.2.0",  # https://github.com/6809/dragonlib
@@ -42,8 +42,15 @@ Documentation = "https://github.com/jedie/DragonPy"
 Source = "https://github.com/jedie/DragonPy"
 
 [project.scripts]
-dragonpy_app = "dragonpy.__main__:main"
-dragonpy_dev = "dragonpy.cli_dev:main"
+dragonpy = "dragonpy.__main__:main"
+
+
+[tool.bx_py_utils.doc_write]
+docstring_prefix = 'DocWrite:'
+macro_prefix = 'DocWriteMacro:'
+output_base_path = './docs/'
+search_paths = ['./dragonpy/']
+delete_obsolete_files = true
 
 
 [build-system]
@@ -133,6 +140,7 @@ applied_migrations = [
     "a294179", # 2025-04-22T17:02:46+02:00
     "4662321", # 2025-04-22T20:40:34+02:00
     "95a3003", # 2025-11-28T22:00:56+01:00
+    "af6dd62", # 2026-01-26T16:04:53+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
