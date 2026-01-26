@@ -190,18 +190,19 @@ usage: ./dev-cli.py [-h] {coverage,install,lint,mypy,nox,pip-audit,publish,test,
 │   • lint      Check/fix code style by run: "ruff check --fix"                                                        │
 │   • mypy      Run Mypy (configured in pyproject.toml)                                                                │
 │   • nox       Run nox                                                                                                │
-│   • pip-audit Run pip-audit check against current requirements files                                                 │
+│   • pip-audit                                                                                                        │
+│               Run pip-audit check against current requirements files                                                 │
 │   • publish   Build and upload this project to PyPi                                                                  │
 │   • test      Run unittests                                                                                          │
 │   • update    Update dependencies (uv.lock) and git pre-commit hooks                                                 │
 │   • update-readme-history                                                                                            │
-│ Update project history base on git commits/tags in README.md Will be exited with 1 if the README.md was updated      │
-│ otherwise with 0.                                                                                                    │
+│               Update project history base on git commits/tags in README.md Will be exited with 1 if the README.md    │
+│               was updated otherwise with 0.                                                                          │
 │                                                                                                                      │
-│ Also, callable via e.g.:                                                                                             │
-│     python -m cli_base update-readme-history -v                                                                      │
+│               Also, callable via e.g.:                                                                               │
+│                   python -m cli_base update-readme-history -v                                                        │
 │   • update-test-snapshot-files                                                                                       │
-│ Update all test snapshot files (by remove and recreate all snapshot files)                                           │
+│               Update all test snapshot files (by remove and recreate all snapshot files)                             │
 │   • version   Print version and exit                                                                                 │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
@@ -476,6 +477,7 @@ To make a new release, do this:
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.10.0](https://github.com/jedie/DragonPy/compare/v0.9.3...v0.10.0)
+  * 2026-01-26 - Apply manageprojects updates
   * 2025-12-09 - Update via manageprojects
   * 2025-07-28 - update requirements + remove obsolete requirements.txt
   * 2025-04-22 - replace click with tyro

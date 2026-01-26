@@ -1,5 +1,4 @@
 
-
 name: tests
 permissions:
   contents: read
@@ -14,11 +13,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.14", "3.13", "3.12", "3.11"]
+        python-version: ["3.14", "3.13", "3.12"]
+        os: [ubuntu-latest, macos-latest] # TODO: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
       run: |
@@ -28,32 +28,21 @@ jobs:
         git checkout $GITHUB_SHA || (git fetch && git checkout $GITHUB_SHA)
 
     - name: 'Set up Python ${{ matrix.python-version }}'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@main
       # https://github.com/marketplace/actions/setup-python
       with:
         python-version: '${{ matrix.python-version }}'
         cache: 'pip' # caching pip dependencies
         cache-dependency-path: '**/requirements.*.txt'
 
-    - name: Cache ROMs
-      id: cache-roms
-      uses: actions/cache@v3
-      # https://github.com/marketplace/actions/cache
+    - name: Install uv and set the Python version
+      # https://docs.astral.sh/uv/guides/integration/github/#multiple-python-versions
+      uses: astral-sh/setup-uv@main
       with:
-        path: roms
-        key: cache-roms
+        python-version: ${{ matrix.python-version }}
 
-    - name: 'Bootstrap dev CLI'
-      # The first CLI call will create the ".venv"
-      run: |
-        ./dev-cli.py version
-
-    - name: 'dev CLI help'
-      run: |
-        ./dev-cli.py --help
-
-    - name: 'Bootstrap app CLI'
-      # The first CLI call will create the ".venv-app"
+    - name: 'Bootstrap app venv'
+      # The first CLI call will create the .venv
       run: |
         ./cli.py version
 
@@ -61,9 +50,22 @@ jobs:
       run: |
         ./cli.py --help
 
+    - name: Cache ROMs
+      id: cache-roms
+      uses: actions/cache@main
+      # https://github.com/marketplace/actions/cache
+      with:
+        path: roms
+        key: cache-roms
+
     - name: 'Download ROMs'
       run: |
         ./cli.py download-roms
+
+    - name: 'Bootstrap dev venv'
+      # The first CLI call will create the .venv
+      run: |
+        ./dev-cli.py version
 
     - name: 'dev CLI help'
       run: |
@@ -81,9 +83,11 @@ jobs:
         ./dev-cli.py coverage
 
     - name: 'Upload coverage report'
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@main
       # https://github.com/marketplace/actions/codecov
       with:
+        # https://docs.codecov.com/docs/codecov-tokens#example-github-actions--official-codecov-action
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
         verbose: true
 
